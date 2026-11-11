@@ -40,6 +40,17 @@ skyget watch <job-id>
 `skyget` 同时提供 CLI、MCP、HTTP API 和 GUI。它们共享同一本台账、同一份缓存、
 同一个调度器和同一套权限边界。
 
+<details>
+<summary><strong>English summary</strong></summary>
+
+Skynet Dataplane is a local daemon for machines where multiple AI agents download,
+upload, and reuse large data. It provides SHA-256-gated transfers, resumable partials,
+a content-addressed cache, fair scheduling, an auditable ledger, and per-agent policy.
+
+It exposes one shared core through a CLI, MCP, HTTP API, and desktop GUI.
+
+</details>
+
 > 旧名「天网下载器 / `skynet-download` / `skynet-downloadd`」继续可用；新主名是
 > `skynet-dataplane`（GUI）与 `skynet-dataplaned`（守护进程）。
 > `skyget` 命令、`app_id`、数据目录保持兼容，已安装的入口不用重装。
