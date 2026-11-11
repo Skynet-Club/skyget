@@ -73,11 +73,26 @@
 已知边界（9 条，含"优先级不抢占""没有带宽上限""上传没有 S3 multipart"等）见
 [发行说明](release-notes-0.24.md)。
 
+## 平台与系统要求
+
+**0.24.15 只正式支持 Ubuntu Linux x86_64。**
+
+- 发行包是 `amd64`；
+- 构建和验证环境是 Ubuntu 26.04.1 LTS；
+- 二进制要求 `glibc >= 2.39`，Ubuntu 22.04 及更早版本不能直接运行；
+- Ubuntu 24.04 满足 ABI 下限，但本版没有单独做 24.04 发行验收；
+- 原生 Windows 尚未支持；macOS 目前只有源码探索和交叉检查，没有官方包；
+- HLS/DASH 需要额外安装 `ffmpeg`；其它核心能力不依赖 ffmpeg。
+
+原生 Windows 10/11 和 macOS 的目标、技术工作与当前状态见
+[平台支持与路线图](platform-support.md)。
+
 ## 安装（两种，都不用编译）
 
 ```bash
 # 有 sudo：发行包
-sudo dpkg -i skynet-dataplane_0.24.15_amd64.deb
+sha256sum -c skynet-dataplane_0.24.15_amd64.deb.sha256
+sudo apt install ./skynet-dataplane_0.24.15_amd64.deb
 systemctl --user daemon-reload && systemctl --user enable --now skynet-dataplaned
 
 # 没有 sudo：用户空间（装成实体文件，不是软链到构建目录）

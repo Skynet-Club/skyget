@@ -27,7 +27,8 @@
   （探测 / 传输 / 校验 / 落地），回答「慢在哪」。
 - **命令行补齐了「把事做完」的那半**：`pause/resume/cancel`、`events`、`--timeout`、
   `show --url`、`completions`、`--json` 在所有失败路径上都是一行。
-- **macOS 可编**：`/proc` 依赖收进一层薄封装（macOS 走 libproc），CI 有 macos job。
+- **macOS 源码探索**：`/proc` 依赖收进一层薄封装，并有交叉类型检查；0.24.15
+  仍不提供 macOS 官方发行物或支持承诺。
 - **修了两个线上会咬人的真 bug**：主源说谎时多源下载整条失败（0.23.1 复现）；
   `skyget curl -o <文件>` 生成的是目录。
 
@@ -35,7 +36,8 @@
 
 ```bash
 # 有 sudo：
-sudo dpkg -i skynet-dataplane_0.24.15_amd64.deb
+sha256sum -c skynet-dataplane_0.24.15_amd64.deb.sha256
+sudo apt install ./skynet-dataplane_0.24.15_amd64.deb
 # 没有 sudo（开发机常见）：装成实体文件到 ~/.local
 scripts/install-user.sh
 
@@ -52,6 +54,19 @@ curl -s http://127.0.0.1:7788/health        # {"ok":true,"version":"0.24.15"}
 数据目录（`~/.local/share/skynet-download`）、`app_id` 全部不变；
 HTTP 契约仍是 **v1**，只做了加法（`priority`、`phase`、`/check`、`previous_job`）。
 台账新增 `priority` 列，追加式迁移，老库自动补默认值。
+
+平台兼容性：
+
+| 平台 | 0.24.15 状态 |
+|---|---|
+| Ubuntu Linux x86_64 | **唯一正式支持**；包为 `amd64`，验证环境 Ubuntu 26.04.1 |
+| Ubuntu 24.04 LTS | 满足 `glibc >= 2.39` 下限，但本版未单独发行验收 |
+| Ubuntu 22.04 及更早 | 不支持，glibc 版本过低 |
+| 原生 Windows 10/11 | 尚未支持，规划中 |
+| macOS | 源码可探索，没有官方包或支持承诺 |
+
+完整系统要求、安装/卸载/升级注意事项和 Windows/macOS 路线图见
+[平台支持与路线图](platform-support.md)。
 
 ## 对源站的礼貌（可核对，不是口号）
 
@@ -81,7 +96,7 @@ HTTP 契约仍是 **v1**，只做了加法（`priority`、`phase`、`/check`、`
 - `skyget check` 需要 daemon 在：它问的是 daemon 那份策略。
 - 上传没有 S3 multipart（`PUT` / `tus` 有）；签名是「验」，没有 `require_trust` 字段。
 - `SKYGET_ALLOW_PRIVATE=1` **不会**连带放开云元数据；要单独设 `SKYGET_ALLOW_METADATA=1`。
-- macOS 上 GUI 没有托盘（D-Bus 专属），退化为「关窗口即退出」。
+- 0.24.15 不提供 macOS 官方发行物；原生 Windows 尚未支持。
 
 ## 产物
 

@@ -319,8 +319,9 @@
 ## 0.24.0
 
 **平台**
-- **macOS 可用**：`/proc` 依赖收进 `src/sys.rs`（Linux 走 `/proc`，macOS 走 libproc），
-  CLI / daemon / MCP 在 macOS 上能编能跑；CI 增加 `macos-latest`（单测 + selftest + 真实下载/续传）。
+- **macOS 源码探索**：`/proc` 依赖收进 `src/sys.rs`（Linux 走 `/proc`，macOS 走 libproc），
+  CLI / daemon / MCP 有过源码和 CI 交叉检查。这不是 macOS 官方发行承诺；
+  0.24.15 的正式支持仍只有 Ubuntu Linux x86_64。
   GUI 托盘仍是 Linux 专属（D-Bus），macOS 上退化为「关窗口即退出」。
 - `sha256sum` 在验收脚本里换成可移植的 `sha()`（macOS 只有 `shasum -a 256`）。
 

@@ -59,9 +59,10 @@ python3 scripts/crash.py --rounds 4    # 任意进度硬杀后收敛
 公共样板在 `scripts/lib.sh`（端口/临时目录/ok-no/trap/等 health）：
 新脚本 `source` 它就行，别再复制那 30 行 —— 复制多了就会各写各的等待逻辑。
 
-平台：`.github/workflows/ci.yml` 的 `macos` job 负责 macOS（单测 + selftest +
-真实下载/续传）。**本机没有 macOS SDK，交叉编译验不了链接**，macOS 的通过证据
-只有这条 CI。
+平台：0.24.15 的正式发行目标是 **Ubuntu Linux x86_64**。发布的 deb 在
+Ubuntu 26.04.1 LTS 上构建和验证，二进制要求 glibc 2.39+。`.github/workflows/ci.yml`
+里的 `macos` job 只服务未来移植和源码兼容性，不代表 0.24.15 已正式支持 macOS；
+原生 Windows 尚未支持。完整边界见 `docs/platform-support.md`。
 
 > 坑：外层 shell 里如果带着 `SKYGET_API_TOKEN`，e2e 起的 daemon 会启用鉴权，
 > 而脚本自己的 curl 不带 token → 一堆 `auth.required` 假失败。
@@ -92,8 +93,8 @@ bash scripts/mac-crosscheck.sh
 
 它证明「类型和 cfg 对」，**不证明链接和真机行为**；`--features bt` 过不去
 （librqbit → aws-lc 的 aarch64-apple 汇编要真 Apple 汇编器）。
-真机证据仍然只有 CI 的 `macos` job —— 而那个 job 在本仓库**还没有 remote，
-一次都没跑过**。发版前必须 push 一次并看到它绿。
+因此它是**未来 macOS 移植的源码检查**，不是 0.24.15 的官方平台认证。
+正式支持矩阵与路线图见 `docs/platform-support.md`。
 
 push 前再跑两条冒烟（都很便宜，能挡住最尴尬的两种情况）：
 

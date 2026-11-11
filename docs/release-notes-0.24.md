@@ -15,6 +15,24 @@
 - CI 的 skill 检查改用现行 `skill_sync.py`；干净 HOME 不再把“未安装”误报成漂移。
 - 测试证据、e2e 数量、README 的“还没做”清单统一到当前实现。
 
+## 平台支持与系统要求
+
+**0.24.15 的唯一正式支持平台是 Ubuntu Linux x86_64。**
+
+- Release 产物：`skynet-dataplane_0.24.15_amd64.deb`；
+- 构建与验证环境：Ubuntu 26.04.1 LTS x86_64；
+- 二进制最高要求 `GLIBC_2.39`；
+- Ubuntu 24.04 LTS 满足 ABI 下限，但本版没有单独做 24.04 发行验收；
+- Ubuntu 22.04 及更早版本不能直接运行；
+- systemd 用户服务可选，非 systemd 环境可由 `skyget daemon ensure` 直接拉起；
+- HLS/DASH 需要额外安装 `ffmpeg`，其它核心能力不依赖 ffmpeg；
+- 原生 Windows 10/11 尚未支持；
+- macOS 只有源码探索、交叉检查和 CI 配置，没有官方发行物或支持承诺；
+- WSL2 中运行 Ubuntu 走 Linux 支持路径，不等于原生 Windows 支持。
+
+Windows/macOS 的目标、当前状态和技术工作见
+[平台支持与路线图](platform-support.md)。
+
 ## 这一版真正变的是什么
 
 0.24 的主线只有一句：**从「能下载」变成「一台机器上多个 agent 可以放心共用的数据面」。**
@@ -27,7 +45,7 @@
 | 4 | **`skyget check` + `POST /check`** | 提交前先问「会被怎么判」，和真提交**共用同一段判定代码**，逐项给出 identity/protocol/mirrors/sha256/credential/dest/upload_source/egress。 |
 | 5 | **`skyget ensure`** | 从「下什么」升级成「这台机器该是什么样」：对的不联网不写盘，只增改不删。 |
 | 6 | **多源说谎时能救回来** | 校验不符改为逐个源单独重试。**0.23.1 线上版本在主源说谎时会整条失败**，即使旁边有健康镜像。 |
-| 7 | **macOS 可编** | `/proc` 依赖收进 `src/sys.rs`（macOS 走 libproc）；CI 有 `macos` job。 |
+| 7 | **macOS 源码探索** | `/proc` 依赖收进 `src/sys.rs`（macOS 走 libproc）；有交叉检查，但 0.24.15 不提供 macOS 官方包。 |
 | 8 | **调度与可观测** | 排队优先级（interactive/normal/batch）、事件流 `phase` 耗时、`check`、`pause/resume/cancel`、`events`、`--timeout`、`--json` 在所有失败路径上都是一行。 |
 
 ## 对源站的礼貌（可核对，不是口号）
@@ -64,8 +82,8 @@
 6. **云元数据单独一个开关**：`SKYGET_ALLOW_PRIVATE=1` 不会连带放开
    `169.254.169.254` / `100.100.100.200` / `fd00:ec2::254`；要放行得设
    `SKYGET_ALLOW_METADATA=1`（错误码 `policy.metadata_denied`）。
-7. **macOS：GUI 没有托盘**。托盘走 D-Bus StatusNotifierItem（Linux 专属），
-   macOS 上退化为「关窗口即退出」。`--hidden` 在 macOS 上等于普通启动。
+7. **平台发布边界**。0.24.15 只提供 Ubuntu Linux x86_64 官方发行物；
+   原生 Windows 尚未支持，macOS 只有源码探索与交叉检查，没有官方包或支持承诺。
 8. **`verify` 的「无主缓存块」只是信息**，不会自动删（可能对 `--sha256` 秒传仍有用）。
 9. **两条一致性测试还挂着「待补」**：连接数上限的压力测试、浏览器 `Origin` 的 socket 级测试
    （代码路径在，压力场景没有）。
@@ -82,7 +100,8 @@
 
 ```bash
 # 1) 换二进制：有 sudo 用 deb；没有就装到 ~/.local（实体文件，不是软链）
-sudo dpkg -i skynet-dataplane_0.24.15_amd64.deb
+sha256sum -c skynet-dataplane_0.24.15_amd64.deb.sha256
+sudo apt install ./skynet-dataplane_0.24.15_amd64.deb
 #   或：scripts/install-user.sh
 
 # 2) 重启 daemon —— 水位线、优先级、phase、socket 都是 daemon 侧行为
@@ -104,15 +123,15 @@ daemon-lifecycle-e2e.sh           6 / 6
 scripts/acceptance.sh             15 / 15 全部通过
 scripts/hostile.py                5 / 5
 scripts/crash.py --rounds 4       4 次硬杀收敛，进度从不回退
-macOS 交叉类型检查                 aarch64-apple-darwin：http ✓ / http+gui ✓
+macOS 交叉类型检查                 aarch64-apple-darwin：http ✓ / http+gui ✓（非官方支持）
 ```
 
 安装路径也验过：`~/.local/bin` 下六个入口是**实体文件**（`readlink /proc/<pid>/exe`
 指向 `~/.local/bin/skynet-downloadd`，不是仓库里的 target）；解开的 deb 能直接跑
 （`/tmp/x/usr/bin/skyget doctor` → 可用，13 个文件 / 61MB）。
 
-macOS 的**真机证据只有 CI 的 `macos` job**；本机交叉 check 只证明类型与 cfg 对，
-不证明链接和运行时行为（`bt` 特性因 aws-lc 的汇编无法交叉编译，只能交给 CI）。
+macOS 交叉检查只证明类型和 cfg 对，**不构成 0.24.15 的 macOS 发行支持**。
+原生 Windows 当前没有移植或发行物；未来路线见 [platform-support.md](platform-support.md)。
 
 ## 产物
 

@@ -8,6 +8,8 @@
 
 可信下载与上传 · 断点续传 · 内容寻址缓存 · 公平调度 · per-agent 限权
 
+**当前正式支持：Ubuntu Linux x86_64** · macOS / Windows 在路线图中
+
 [v0.24.15 Preview](https://github.com/Skynet-Club/skyget/releases/tag/v0.24.15-preview)
 · [MCP](https://github.com/Skynet-Club/skyget/blob/main/docs/deploy.md)
 · [Security](SECURITY.md)
@@ -28,7 +30,8 @@
 这一整段，现有下载器、下载站和网盘全部留白 —— 而 agent 恰好卡在这里。
 
 ```bash
-sudo dpkg -i skynet-dataplane_0.24.15_amd64.deb
+sha256sum -c skynet-dataplane_0.24.15_amd64.deb.sha256
+sudo apt install ./skynet-dataplane_0.24.15_amd64.deb
 skyget daemon ensure
 skyget doctor
 
@@ -59,6 +62,7 @@ It exposes one shared core through a CLI, MCP, HTTP API, and desktop GUI.
 
 - [命令行参考](docs/cli.md)：所有命令、参数、默认值、环境变量、MCP 工具
 - [部署与策略](docs/deploy.md)：systemd、per-agent token、策略、配额、凭证
+- [平台支持与路线图](docs/platform-support.md)：Ubuntu 正式支持、macOS/Windows 规划
 - [安全模型](docs/security.md)：信任边界、SSRF/凭证/路径控制、部署清单与残余风险
 - [发布与验收](docs/release.md)：构建、28 个 e2e、打包、部署、回滚清单
 - [架构决策](docs/adr/)：单写者、安全边界、上传、detach、进度面、凭证与配额
@@ -75,12 +79,19 @@ It exposes one shared core through a CLI, MCP, HTTP API, and desktop GUI.
 - [许可证](LICENSE) / [第三方代码](THIRD_PARTY.md) / [安全策略](SECURITY.md)
 - [夜班记录 2026-10-31](docs/night-shift-2026-10-31.md)：本轮审计修复与验证证据
 
-## 平台
+## 平台支持
 
-Linux 与 **macOS** 都能跑 CLI / daemon / MCP（`/proc` 依赖已经收进 `src/sys.rs`，
-macOS 走 libproc）。CI 在 `macos-latest` 上跑单测、`selftest` 和一条真实下载/续传。
-**GUI 的托盘图标还是 Linux 专属**（走 D-Bus StatusNotifierItem）：macOS 上编译通过、
-退化为「关窗口即退出」；要原生菜单栏图标得另做 NSStatusItem，那是独立的一块移植。
+**0.24.15 唯一正式支持的平台是 Ubuntu Linux x86_64。**
+
+- 发布包：`skynet-dataplane_0.24.15_amd64.deb`；
+- 验证环境：Ubuntu 26.04.1 LTS x86_64；
+- 二进制要求 `glibc >= 2.39`；Ubuntu 22.04 及更早版本不能直接运行；
+- Ubuntu 24.04 LTS 满足 ABI 下限，但 0.24.15 没有单独做 24.04 发行验收；
+- 原生 Windows 尚未支持；macOS 目前只有源码探索与交叉检查，没有官方包；
+- WSL2 中的 Ubuntu 走 Linux 支持路径，不属于原生 Windows 支持。
+
+Windows 10/11 和 macOS 的目标、当前状态及技术工作见
+[平台支持与路线图](docs/platform-support.md)。
 
 ## 构建
 

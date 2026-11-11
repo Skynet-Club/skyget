@@ -2,6 +2,11 @@
 
 面向“一台机器、多个 agent、长期运行”的部署说明。只跑单次下载可以跳过。
 
+> **平台边界：** 0.24.15 只正式支持 Ubuntu Linux x86_64。发布包为 `amd64`，
+> 在 Ubuntu 26.04.1 LTS 上构建和验证，要求 glibc 2.39+。Ubuntu 22.04 及更早版本
+> 不能直接运行；原生 Windows 尚未支持；macOS 只有源码探索，没有官方包。
+> 见 [平台支持与路线图](platform-support.md)。
+
 ## 1. 安装
 
 ```bash
@@ -14,17 +19,37 @@ install -Dm755 target/release/skynet-mcp     ~/.local/bin/skynet-mcp
 需要界面时再编 `--features full`，装 `skynet-dataplane`（GUI）。
 旧名 `skynet-downloadd` / `skynet-download` 仍然可用。
 
-Debian / Ubuntu 也可以直接构建安装包：
+Ubuntu 也可以直接构建安装包：
 
 ```bash
 packaging/build-deb.sh            # 调 cargo build --release --features full
-sudo dpkg -i dist/skynet-dataplane_*_amd64.deb
+sha256sum -c dist/skynet-dataplane_*_amd64.deb.sha256
+sudo apt install ./dist/skynet-dataplane_*_amd64.deb
 systemctl --user enable --now skynet-dataplaned
 ```
 
 包内包含 `skyget` / `skynet-dataplaned` / `skynet-mcp` / `skynet-dataplane`、
-用户级 systemd unit、桌面入口和图标。只产出包不安装：去掉 `sudo dpkg -i` 即可，
+用户级 systemd unit、桌面入口和图标。只产出包不安装：去掉 `sudo apt install` 即可，
 用 `dpkg-deb -x` 检查内容。
+
+升级时先停止用户服务，再安装新包并重建 daemon：
+
+```bash
+skyget daemon stop
+sudo apt install ./skynet-dataplane_<version>_amd64.deb
+systemctl --user daemon-reload
+skyget daemon ensure
+skyget doctor
+```
+
+卸载程序不会删除台账、缓存、分片和配置：
+
+```bash
+sudo apt remove skynet-dataplane
+# 如需一并清理用户数据，先确认路径再手动处理：
+# ~/.local/share/skynet-download
+# ~/.config/skynet-dataplane.env
+```
 
 ## 2. systemd（用户服务）
 

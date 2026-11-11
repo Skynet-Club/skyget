@@ -589,7 +589,10 @@ journalctl --user -u skynet-dataplaned -f
    所以「关窗口 → 收进托盘 → 从托盘叫回来」在这类桌面上做不到；关闭退化为最小化。
 2. **暂停对命令行起的任务无效**：那是另一个进程的事，界面会直接说「去那边停它」。
 3. **切片流的进度按播放时长算**，字节数最后一刻才知道 —— 这是流本身的特性，不是记错了。
-4. **只出了 Linux x86_64 的包**：Windows 需要另外交叉编译（egui 那套的坑记在 skill 里）。
+4. **0.24.15 只正式支持 Ubuntu Linux x86_64**：发行包是 `amd64`，实际验证环境为
+   Ubuntu 26.04.1，二进制要求 glibc 2.39+。Ubuntu 22.04 及更早版本不能直接运行；
+   原生 Windows 尚未支持；macOS 只有源码探索和交叉检查，没有官方包。未来路线见
+   [docs/platform-support.md](docs/platform-support.md)。
 5. **本地接口没有鉴权**：只绑回环。这台机器上能跑程序的人本来就能直接跑 `skyget`，
    加 token 只是自我安慰；跨机器请用 SSH 隧道。
 6. **凭证只支持 http/https 直链**：HLS/DASH 与种子带 `--credential-ref` 会明确报错，

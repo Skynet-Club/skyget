@@ -4,6 +4,21 @@ An agent-native data plane for a single machine: downloads, uploads, verificatio
 a content-addressed cache, scheduling, and per-agent policy. One daemon, one ledger,
 many agents.
 
+## Platform support
+
+**0.24.15 officially supports Ubuntu Linux x86_64 only.**
+
+- The published artifact is `skynet-dataplane_0.24.15_amd64.deb`.
+- It was built and validated on Ubuntu 26.04.1 LTS x86_64 and requires glibc 2.39+.
+- Ubuntu 22.04 and older cannot run this binary.
+- Ubuntu 24.04 meets the ABI floor, but was not separately release-certified for 0.24.15.
+- Native Windows is not supported. macOS currently has exploratory source compatibility,
+  not an official package or support commitment.
+- Ubuntu under WSL2 follows the Linux path; it is not native Windows support.
+
+See [platform support and roadmap](docs/platform-support.md) for the current matrix,
+known gaps, and planned macOS/Windows work.
+
 ## Why another downloader?
 
 - **Shared by agents**: one daemon, one ledger, one cache. Once content is in the
