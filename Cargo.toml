@@ -1,0 +1,147 @@
+[package]
+name = "skynet-download"
+version = "0.24.15"
+edition = "2021"
+license = "MIT"
+description = "天网盒子 — 单机多 agent 的下载、上传、校验与调度。人类看得见，agent 用得动。"
+
+[lib]
+name = "skyfetch"
+path = "src/lib.rs"
+
+[[bin]]
+name = "skyget"
+path = "src/bin/skyget.rs"
+required-features = ["http"]
+
+# 新主名：天网盒子守护进程。
+[[bin]]
+name = "skynet-dataplaned"
+path = "src/bin/dataplaned.rs"
+required-features = ["http"]
+
+# 旧名兼容：已有 systemd/脚本/用户习惯继续可用。
+[[bin]]
+name = "skynet-downloadd"
+path = "src/bin/downloadd.rs"
+required-features = ["http"]
+
+# 新主名：天网盒子 GUI（机群台 + 下载/上传控制）。
+[[bin]]
+name = "skynet-dataplane"
+path = "src/bin/dataplane.rs"
+required-features = ["gui"]
+
+# 旧名兼容：桌面文件、Dock 归并和旧脚本继续可用。
+[[bin]]
+name = "skynet-download"
+path = "src/bin/downloader.rs"
+required-features = ["gui"]
+
+# MCP：agent 发现和调用天网盒子的入口。它本身不下载，只把调用转给守护进程，
+# 所以 http 构建就够，不需要 gui / bt。
+[[bin]]
+name = "skynet-mcp"
+path = "src/bin/mcp.rs"
+required-features = ["http"]
+
+# 示例也按 feature 门控：`cargo test` 在 http-only 构建下以前会去编 GUI 示例，
+# 一编译就炸 —— 测试还没开始跑，先被示例挡住。
+[[example]]
+name = "embed"
+required-features = ["http"]
+
+[[example]]
+name = "bare_egui"
+required-features = ["gui"]
+
+[[example]]
+name = "click_probe"
+required-features = ["gui"]
+
+[[example]]
+name = "cmd_probe"
+required-features = ["gui"]
+
+[[example]]
+name = "drag_probe"
+required-features = ["gui"]
+
+[[example]]
+name = "open_probe"
+required-features = ["gui"]
+
+[[example]]
+name = "repaint_probe"
+required-features = ["gui"]
+
+[[example]]
+name = "rerun_probe"
+required-features = ["gui"]
+
+[[example]]
+name = "titlebar_probe"
+required-features = ["gui"]
+
+[target.'cfg(target_os = "linux")'.dependencies]
+# 托盘走 D-Bus 的 StatusNotifierItem：只有 Linux 有这套。
+# 放进 target 段，macOS 构建连试都不用试。
+ksni = { version = "0.3", default-features = false, features = ["blocking", "async-io"], optional = true }
+zbus = { version = "5", default-features = false, features = ["blocking-api"], optional = true }
+
+[features]
+# 默认只要直链与切片流：机库这种下游不该被拖进 BT 和界面那一整套
+default = ["http"]
+# 直链 / 切片流 / 清单 / 自检 / 本地接口 —— 内核的最小可用面
+http = []
+# BitTorrent（magnet、.torrent）：会带进 tokio + librqbit
+bt = ["dep:librqbit", "dep:tokio"]
+# 界面
+gui = ["dep:eframe", "dep:egui", "dep:ksni", "dep:zbus", "dep:png"]
+# 全部：开发与发布时装这个
+full = ["http", "bt", "gui"]
+
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "rustls-tls", "json"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+sha2 = "0.10"
+# webhook 可选 HMAC-SHA256 签名；ring 已经在 reqwest/rustls 的依赖树里
+ring = "0.17"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive"] }
+# 补全脚本：给 bash/zsh/fish 用，省掉「记不住子命令」这类摩擦
+clap_complete = "4"
+anyhow = "1"
+# GUI 用 glow/OpenGL：eframe 默认的 wgpu 在这个 Mesa 上首次启动会卡
+# Vulkan 管线分析（实测 8–12 秒，鼠标一直转圈）。glow 启动路径短得多。
+eframe = { version = "0.36", optional = true, default-features = false, features = [
+    "accesskit",
+    "default_fonts",
+    "glow",
+    "links",
+    "wayland",
+    "x11",
+] }
+# 只用于 SKYGET_SHOT 自截图（这台机器没有截图工具，只能自己截自己）
+png = { version = "0.17", optional = true }
+egui = { version = "0.36", optional = true }
+librqbit = { version = "9", optional = true }
+# 跨进程分片锁（flock）在 http-only 构建里也要有，所以不再是 gui 专属可选依赖
+libc = "0.2"
+tokio = { version = "1", features = ["rt-multi-thread", "time", "macros"], optional = true }
+# 任务 id 的随机位：不引 uuid，时间戳 + pid + 序号 + 48 位随机就够了
+getrandom = "0.2"
+# URL 解析与 SSRF 判据（reqwest 已经间接带了这个 crate，这里显式依赖）
+url = "2"
+
+[profile.release]
+opt-level = 2
+strip = true
+
+# 平台补丁：egui-winit 0.36.2 会把 GNOME/Wayland + fcitx5 反复发来的同一条空预编辑
+# 原样塞进 egui，于是每一帧都「立刻重绘」——150~200fps 空转，dock 图标一直闪。
+# vendor/egui-winit 里加了「重复预编辑直接丢掉」的十行补丁（上游 0.36/0.37 都还没修）。
+# 上游修好后删掉这一段和 vendor/ 目录即可。
+[patch.crates-io]
+egui-winit = { path = "vendor/egui-winit" }

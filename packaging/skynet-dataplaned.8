@@ -1,0 +1,76 @@
+.TH SKYNET-DATAPLANED 8 "2026-11" "天网盒子 0.24" "System Administration"
+.SH NAME
+skynet\-dataplaned \- 天网盒子的守护进程：下载/上传的唯一写者、调度、台账与缓存
+.SH SYNOPSIS
+.B skynet\-dataplaned
+.RB [ \-\-port
+.IR PORT ]
+.SH DESCRIPTION
+守护进程是这台机器上所有 agent 的数据搬运层：它持有唯一的任务台账、
+内容寻址缓存和未完成分片，并按全局上限调度任务。
+.PP
+窗口、命令行、MCP 都是它的前端。客户端断开不会中断任务；
+重连后用
+.B skyget watch
+接着读事件流。
+.PP
+旧名
+.B skynet\-downloadd
+是同一个程序、同一份数据目录、同一个端口，两个名字可以互换。
+.PP
+进程名会改成
+.BR skygetd ，
+这样
+.B pkill \-x skynet\-download
+不会顺手把守护进程也杀掉。
+.SH OPTIONS
+.TP
+.B \-\-port \fIPORT\fR
+监听端口，默认 7788（只绑 127.0.0.1）。
+.SH FILES
+.TP
+.I $SKYGET_HOME/daemon.sock
+Unix socket（0660）。对端 uid 由内核给出：同 uid 等价于主 token，
+\fBSKYGET_UDS_AGENTS\fR 里登记的 uid/gid 对应到 agent 身份。
+.TP
+.I $SKYGET_HOME/tasks.db
+任务台账。\fBSKYGET_HOME\fR 未设置时为
+.IR ~/.local/share/skynet\-download/ .
+.SH ENVIRONMENT
+.B SKYGET_API_TOKEN
+主 token（人类 GUI / 运维）。设置后除
+.B /health
+外都要求 Bearer。
+.TP
+.B SKYGET_AGENTS
+\fItoken=name\fR 注册表：每个 agent 一个 token，台账与公平队列用 token 绑定的名字。
+.TP
+.B SKYGET_AGENT_POLICIES
+per\-agent 策略（落地根、主机白名单、上传根、并发）。
+.TP
+.B SKYGET_AGENT_QUOTAS
+按 agent 的每日字节配额，例如 \fBclaude=10GB,pi=500MB\fR。
+.TP
+.B SKYGET_UDS_AGENTS
+Unix socket 的 uid/gid → agent 名映射，例如 \fB1001=claude\fR。
+.TP
+.B SKYGET_ALLOW_PRIVATE / SKYGET_ALLOW_METADATA / SKYGET_ALLOWED_HOSTS
+出网边界。元数据地址单独一档：\fBSKYGET_ALLOW_PRIVATE=1\fR 不会连带放开它。
+.TP
+.B SKYGET_DEST_ROOTS / SKYGET_UPLOAD_ROOTS
+允许落地的根 / 允许上传读取的根（上传默认禁止）。
+.TP
+.B SKYGET_MAX_JOBS / SKYGET_MAX_QUEUED / SKYGET_MAX_PER_AGENT
+并发与队列上限。
+.TP
+.B SKYGET_CACHE_MAX_BYTES
+缓存水位线；超过时自动清到低水位（受 pin、落地链接、最小年龄保护）。
+.SH SIGNALS
+.B SIGTERM
+正常退出（清理 pid 文件与 socket）。
+.SH EXIT STATUS
+0 正常退出；非 0 表示起不来（端口被占、数据目录不可写等，原因在 stderr）。
+.SH SEE ALSO
+.BR skyget (1)
+.SH LICENSE
+MIT。第三方代码见仓库的 THIRD_PARTY.md。

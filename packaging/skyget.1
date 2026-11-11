@@ -1,0 +1,135 @@
+.TH SKYGET 1 "2026-11" "天网盒子 0.24" "User Commands"
+.SH NAME
+skyget \- 天网盒子的命令行：下载、上传、校验、缓存、调度
+.SH SYNOPSIS
+.B skyget
+.I URL
+.RI [ options ]
+.br
+.B skyget
+.I COMMAND
+.RI [ options ]
+.SH DESCRIPTION
+.B skyget
+是一台机器上多个 agent 共用的数据面客户端：把内容取回来、验明正身、
+放到该在的地方，并且在取完之后还算数（谁下的、hash 是多少、落在哪、下次还要不要重下）。
+.PP
+把地址直接写在命令行上等价于
+.B skyget get
+.IR URL ：
+选项写在地址前面或后面都可以。
+.PP
+带上
+.B \-\-as
+时任务默认提交给本机守护进程
+.BR skynet\-dataplaned (8)；
+不带时保持独立下载（不强制安装、不强制起服务）。
+.SH OPTIONS
+.B \-\-json
+在 stdout 只输出一行结果 JSON（失败也是这一行），过程与错误走 stderr。
+.B \-\-timeout \fISECS\fR
+这条命令最多等多久；到点直接退出（退出码 1，\fBcli.timeout\fR）。
+不等不等于取消：已下的分片留着，重跑接着下；守护进程里的任务继续跑。
+.SH "COMMON COMMANDS"
+.TP
+.B skyget \fIURL\fR [\-o DIR] [\-n NAME] [\-\-sha256 HEX]
+下载、校验、落地。给了
+.B \-\-sha256
+就是硬门槛：不符即失败并丢弃文件。
+.TP
+.B skyget check \fIURL\fR [\-o DIR] [\-\-sha256 HEX]
+预检：这条提交会被接受还是被拒、卡在哪一项。不排队、不联网，
+和真提交共用同一段判定（因此不会说谎）。
+.TP
+.B skyget list [\-l N] [\-\-mine|\-\-agents|\-\-source PREFIX]
+台账。默认 20 条，被截断时会明确写出还有多少。
+.TP
+.B skyget show \fIID\fR | skyget show \-\-url \fIURL\fR
+查一条（id 可只写前几位），或按地址查最近一次。
+.TP
+.B skyget pause|resume|cancel \fIID\fR
+暂停 / 继续 / 取消。暂停保留分片；取消会清临时分片并删掉这条记录。
+.TP
+.B skyget watch \fIID\fR [\-\-since N]
+跟事件流并等最终结果；断开后用同一个 id 接着读。
+.TP
+.B skyget events \fIID\fR [\-\-since N] [\-\-follow]
+事件流，只输出 NDJSON（一行一个事件）。
+.TP
+.B skyget verify [\-\-deep] [\-\-repair]
+自检：台账、落地文件、缓存块、分片位图是否彼此自洽。
+.TP
+.B skyget prune [\-\-older\-than 30d] [\-\-max\-bytes 10GB] [\-\-yes]
+清缓存：只删没人用、且很久没碰过的。
+.TP
+.B skyget doctor
+体检：目录、写权限、守护进程连通性、身份与策略。
+.TP
+.B skyget resolve \fIURL\fR
+把下过的地址换成缓存里的回环地址（命中时零网络）。
+.SH ENVIRONMENT
+.TP
+.B SKYGET_HOME
+数据根（台账、缓存、分片、密钥）。默认 \fI~/.local/share/skynet\-download\fR。
+.TP
+.B SKYGET_API
+守护进程地址，默认 \fIhttp://127.0.0.1:7788\fR；写
+.B unix:/path/to/daemon.sock
+时走 Unix socket（身份由内核给，不用 token）。
+.TP
+.B SKYGET_API_TOKEN
+客户端 Bearer token。多 agent 时填该 agent 自己的 token。
+.TP
+.B SKYGET_ALLOW_PRIVATE
+放开私网/回环出网（默认拒绝）。
+.TP
+.B SKYGET_ALLOW_METADATA
+放开云元数据地址（\fI169.254.169.254\fR 等）。默认拒绝，且不随
+.B SKYGET_ALLOW_PRIVATE
+一起放开。
+.TP
+.B SKYGET_ALLOWED_HOSTS
+出网白名单（逗号分隔，支持 \fB*.example.com\fR）。
+.TP
+.B SKYGET_DEST
+默认保存目录；.B SKYGET_DEST_ROOTS 限制允许落地的根。
+.TP
+.B SKYGET_UPLOAD_ROOTS
+允许上传读取的本地根；为空时一律禁止上传（安全默认）。
+.TP
+.B SKYGET_AGENTS
+\fItoken=name\fR 形式的 per\-agent token 注册表。
+.TP
+.B SKYGET_AGENT_POLICIES / SKYGET_AGENT_QUOTAS
+per\-agent 策略覆盖 / 每日字节配额。
+.TP
+.B SKYGET_CACHE_MAX_BYTES / SKYGET_CACHE_LOW_WATER / SKYGET_CACHE_GC_MIN_AGE
+缓存水位线：超过上限时守护进程自动清到低水位。
+.SH FILES
+.TP
+.I ~/.local/share/skynet\-download/tasks.db
+任务台账（SQLite）。
+.TP
+.I ~/.local/share/skynet\-download/blobs/
+内容寻址缓存，按 sha256 存一份，落地用硬链接。
+.TP
+.I ~/.local/share/skynet\-download/parts/
+未完成的分片与段位图（断点续传靠它）。
+.TP
+.I ~/.local/share/skynet\-download/daemon.sock
+守护进程的 Unix socket（0.24 起，权限 0660）。
+.SH EXIT STATUS
+0 成功；1 失败（含任务最终不是 done、CLI 层失败、超时）；2 用法错误。
+.SH EXAMPLES
+.nf
+skyget https://example.org/big.iso
+skyget check https://example.org/big.iso -o ~/models
+skyget \-\-json \-\-as claude get https://example.org/w.bin \-\-sha256 9f2c... \-\-daemon
+skyget watch 01a18e \-\-since 0
+skyget upload ./model.safetensors https://upload.example.org/x \-\-protocol tus \-\-as claude
+.fi
+.SH SEE ALSO
+.BR skynet\-dataplaned (8),
+.I https://github.com/ (仓库内的 docs/cli.md、docs/api\-v1.md、docs/release\-notes\-0.24.md)
+.SH LICENSE
+MIT。第三方代码（vendored egui\-winit，MIT OR Apache\-2.0）见仓库的 THIRD_PARTY.md。

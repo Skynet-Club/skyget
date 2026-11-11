@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=天网盒子
+Name[en]=Skynet Dataplane
+GenericName=Agent 数据面
+Comment=下载、上传、校验、调度。人类看得见，agent 用得动。
+# Exec 由 scripts/install-desktop.sh 替换成真实路径
+Exec=skynet-dataplane
+Icon=skynet-download
+Terminal=false
+Categories=Network;FileTransfer;
+Keywords=download;upload;torrent;magnet;tus;agent;下载;上传;种子;磁力;
+StartupNotify=false
+StartupWMClass=skynet-download

@@ -1,0 +1,21 @@
+[Unit]
+Description=天网盒子守护进程（旧名兼容；下载不随窗口关）
+Documentation=file:///home/skynet/skynet-download/README.md
+# 端口固定 7788；换端口：ExecStart 加 --port NNNN，界面用 SKYGET_API 指过去
+After=network-online.target
+
+[Service]
+Type=simple
+# 身份/配额/策略从这份文件读（不存在也能启动；权限建议 600）
+EnvironmentFile=-%h/.config/skynet-dataplane.env
+ExecStart=%h/.local/bin/skynet-downloadd --port 7788
+# 它只是个本地服务：不要它去抢 CPU，也别在空闲时被回收
+Nice=5
+Restart=on-failure
+RestartSec=2
+# 日志进 journal：journalctl --user -u skynet-downloadd
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
