@@ -8,8 +8,7 @@
 
 可信下载与上传 · 断点续传 · 内容寻址缓存 · 公平调度 · per-agent 限权
 
-[CI](https://github.com/Skynet-Club/skyget/actions/workflows/ci.yml)
-· [v0.24.15](https://github.com/Skynet-Club/skyget/releases/tag/v0.24.15)
+[v0.24.15 Preview](https://github.com/Skynet-Club/skyget/releases/tag/v0.24.15-preview)
 · [MCP](https://github.com/Skynet-Club/skyget/blob/main/docs/deploy.md)
 · [Security](SECURITY.md)
 · [MIT](LICENSE)
