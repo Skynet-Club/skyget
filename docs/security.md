@@ -1,8 +1,8 @@
 # 安全模型与威胁边界
 
 适用对象：`skynet-dataplaned`（旧名 `skynet-downloadd`）+ `skyget`，在一台机器上
-为多个 agent 提供下载/上传。目标不是替代 OS 沙箱，而是保证数据面不会变成 agent 的
-**confused deputy**：agent 可以提交任务，但不能借数据面读本机秘密、打内网、写任意
+为多个 agent 提供下载/上传。目标不是替代 OS 沙箱，而是保证数据盒子不会变成 agent 的
+**confused deputy**：agent 可以提交任务，但不能借数据盒子读本机秘密、打内网、写任意
 路径，或花掉别的 agent 的配额。
 
 这份文档描述**已经实现的边界**和**没有解决的残余风险**。安全结论要能对上代码：

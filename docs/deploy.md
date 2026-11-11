@@ -180,7 +180,7 @@ skyget daemon stop        # systemd 服务或直接进程都能停；顺手清�
   那个会把别人的 daemon 一起带走。
 - **策略从哪来**：自动拉起优先走 systemd（`EnvironmentFile` 里的
   `SKYGET_ALLOW_*` / `ALLOWED_HOSTS` / token），**不继承调用方 agent 的环境** ——
-  否则 agent 自己设个 `SKYGET_ALLOW_PRIVATE=1` 就能把数据面放宽。
+  否则 agent 自己设个 `SKYGET_ALLOW_PRIVATE=1` 就能把数据盒子放宽。
   systemd 不可用时的直启会继承环境，这一档只当兜底。
 
 > 服务端提醒：如果没人跑 CLI、只有外部系统直接 `curl :7788`，按需拉起**不会**发生

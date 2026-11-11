@@ -1,8 +1,10 @@
 # 天网盒子 0.24 · 发行说明
 
 > 命令、二进制名、systemd 单元、数据目录、`app_id` 全部兼容 0.23；
-> 显示名从「天网数据面」改为「天网盒子」，旧名照常工作。
+> 对外产品名是「天网盒子 / Skynet Data Box」，旧名照常工作。
 > 契约仍是 **API v1**（`docs/api-v1.md`）。
+>
+> 项目署名与品牌归属按 **Skynet-Club** 统筹，最终署名以双方共同确认为准。
 
 ## 0.24.15：稳定性收尾
 
@@ -35,13 +37,13 @@ Windows/macOS 的目标、当前状态和技术工作见
 
 ## 这一版真正变的是什么
 
-0.24 的主线只有一句：**从「能下载」变成「一台机器上多个 agent 可以放心共用的数据面」。**
+0.24 的主线只有一句：**从「能下载」变成「一台机器上多个 agent 可以放心共用的数据盒子」。**
 
 | # | 能力 | 一句话 |
 |---|---|---|
 | 1 | **Unix socket + 内核身份** | `$SKYGET_HOME/daemon.sock`（0660），对端 uid 由内核给，**不用分发 token**；登记过的 uid 直接得到 `agent:<name>`，登记表里没有就直接 401。 |
 | 2 | **清单签名（ed25519）** | `sha256` 只证明「字节和某个 hash 一致」，签名才证明「这个 hash 是发布方给的」。`skyget keygen` / `sign` / `manifest-digest` 产签，`install` / `ensure` 验，**fail closed**。 |
-| 3 | **缓存水位线** | `SKYGET_CACHE_MAX_BYTES` 之后 daemon 自己把缓存清到低水位。单机数据面的头号故障不是下载慢，是磁盘被缓存吃满。 |
+| 3 | **缓存水位线** | `SKYGET_CACHE_MAX_BYTES` 之后 daemon 自己把缓存清到低水位。单机数据盒子的头号故障不是下载慢，是磁盘被缓存吃满。 |
 | 4 | **`skyget check` + `POST /check`** | 提交前先问「会被怎么判」，和真提交**共用同一段判定代码**，逐项给出 identity/protocol/mirrors/sha256/credential/dest/upload_source/egress。 |
 | 5 | **`skyget ensure`** | 从「下什么」升级成「这台机器该是什么样」：对的不联网不写盘，只增改不删。 |
 | 6 | **多源说谎时能救回来** | 校验不符改为逐个源单独重试。**0.23.1 线上版本在主源说谎时会整条失败**，即使旁边有健康镜像。 |
@@ -137,12 +139,13 @@ macOS 交叉检查只证明类型和 cfg 对，**不构成 0.24.15 的 macOS 发
 
 | 文件 | 大小 | sha256 |
 |---|---|---|
-| `skynet-dataplane_0.24.15_amd64.deb` | 19,511,352 | `77818b42dea20692938dcccfc8897c0c17ae3a62fe1a81c62fd63c2c52a298ec` |
+| `skynet-dataplane_0.24.15_amd64.deb` | 19,643,758 | `7b97e06bb5bac98e0a268b143bb9a442cef3986e8b88e9fa81ec4e185047dd5e` |
 
 包里包含：`skyget` / `skynet-dataplane`（GUI）/ `skynet-dataplaned`（daemon）/
 `skynet-mcp`、systemd 用户单元、桌面入口与图标、bash/zsh/fish 补全、
 `man skyget` / `man skynet-dataplaned`，以及 `/usr/share/doc/skynet-dataplane/` 下的
-README、CHANGELOG、LICENSE、THIRD_PARTY、平台支持与路线图、DEP-5 `copyright`。
+README、MANUAL、SECURITY、CHANGELOG、LICENSE、AUTHORS、THIRD_PARTY、完整 `docs/`
+（含平台支持、路线图、ADR 与截图）和 DEP-5 `copyright`。
 
 校验和同时落在 `dist/SHA256SUMS` 与 `dist/<deb>.sha256`（`packaging/build-deb.sh`
 每次构建都会重写）。本发行说明不放进包里 —— 包不可能包含自己的哈希。

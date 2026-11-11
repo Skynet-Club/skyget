@@ -3,7 +3,7 @@ name = "skynet-download"
 version = "0.24.15"
 edition = "2021"
 license = "MIT"
-description = "天网盒子 — 单机多 agent 的下载、上传、校验与调度。人类看得见，agent 用得动。"
+description = "天网盒子 / Skynet Data Box — 单机多 agent 的下载、上传、校验与调度。"
 
 [lib]
 name = "skyfetch"

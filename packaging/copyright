@@ -1,8 +1,9 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: skynet-dataplane
-Upstream-Contact: Skynet <hermes@skynet.club>
-Source: https://skynet.club
-Comment: 天网盒子 —— 单机多 agent 的下载 / 上传 / 校验 / 调度数据面。
+Upstream-Name: skyget
+Upstream-Contact: Skynet-Club
+Source: https://github.com/Skynet-Club/skyget
+Comment: 天网盒子 / Skynet Data Box —— 单机多 agent 的下载、上传、校验与调度。
+ 项目署名与品牌归属按 Skynet-Club 统筹，最终署名以双方共同确认为准。
  仓库内 docs/security.md 记录威胁边界与残余风险，THIRD_PARTY.md 记录随源码
  分发的第三方代码。
 

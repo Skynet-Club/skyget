@@ -1,7 +1,11 @@
 # 天网盒子 0.24 · 发行公告
 
-> 一台机器上多个 agent 共用的数据面：下载、上传、校验、缓存、调度、限权。
+> 一台机器上多个 agent 共用的数据盒子：下载、上传、校验、缓存、调度、限权。
 > 人类看得见，agent 用得动。
+
+> 产品名为「天网盒子 / Skynet Data Box」；`skynet-dataplane` / `skynet-dataplaned`
+> 是兼容用的内部二进制名。项目署名与品牌归属按 **Skynet-Club** 统筹，
+> 最终署名以双方共同确认为准。
 
 ## 一句话
 
@@ -17,7 +21,7 @@
   「这个 hash 是发布方给的」。`skyget keygen / sign / manifest-digest` 产签，
   `install / ensure` 验，**fail closed**。
 - **缓存水位线**：`SKYGET_CACHE_MAX_BYTES` 之后 daemon 自己把缓存清到低水位。
-  单机数据面的头号故障不是下载慢，是磁盘被缓存吃满。
+  单机数据盒子的头号故障不是下载慢，是磁盘被缓存吃满。
 - **提交前预检**：`skyget check <URL>` / `POST /check` / MCP `skyget_check`，
   不入队、不联网，告诉你「会被接受还是被拒、卡在哪一项」——
   和真提交**共用同一段判定**，所以预演不会说谎。
@@ -102,12 +106,13 @@ HTTP 契约仍是 **v1**，只做了加法（`priority`、`phase`、`/check`、`
 
 | 文件 | 大小 | sha256 |
 |---|---|---|
-| `skynet-dataplane_0.24.15_amd64.deb` | 19,511,352 | `77818b42dea20692938dcccfc8897c0c17ae3a62fe1a81c62fd63c2c52a298ec` |
+| `skynet-dataplane_0.24.15_amd64.deb` | 19,643,758 | `7b97e06bb5bac98e0a268b143bb9a442cef3986e8b88e9fa81ec4e185047dd5e` |
 
 包里：`skyget` / `skynet-dataplane`（GUI）/ `skynet-dataplaned`（daemon）/ `skynet-mcp`、
 systemd 用户单元、桌面入口与图标、bash/zsh/fish 补全、`man skyget` / `man skynet-dataplaned`、
-`/usr/share/doc/skynet-dataplane/` 下的 README / CHANGELOG / LICENSE / THIRD_PARTY /
-平台支持与路线图 / DEP-5 copyright。
+`/usr/share/doc/skynet-dataplane/` 下的 README / MANUAL / SECURITY / CHANGELOG /
+LICENSE / AUTHORS / THIRD_PARTY / 完整 `docs/`（平台支持、路线图、ADR、截图）/
+DEP-5 copyright。
 
 ## 许可证
 

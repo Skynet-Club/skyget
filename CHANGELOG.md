@@ -7,6 +7,10 @@
 
 **稳定性收尾：生命周期现场不再含糊**
 
+- 对外产品名统一为「天网盒子 / Skynet Data Box」。`skynet-dataplane` /
+  `skynet-dataplaned`、包名、环境变量和数据目录继续保留以维持兼容。
+- 项目公开署名与品牌归属按 **Skynet-Club** 统筹，最终署名以双方书面确认为准，
+  见 `AUTHORS.md`。
 - `skyget daemon status` 现在同时报 pid 文件、pid 是否真的是 daemon、
   socket 是否存在、是否真的能连。崩溃后的死 pid / 失效 socket 不再看起来像正常状态。
 - `skyget daemon stop` 补齐了之前只写在帮助里的“其次按 pid”：systemd 没托管时，

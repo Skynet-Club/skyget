@@ -52,8 +52,14 @@ if [ -f assets/icon.png ]; then
 fi
 # 发行说明不放进包里：它带产物自己的 sha256，而包不可能包含自己的哈希。
 # 它在 dist/ 里和 .deb 并排发。
-install -m 644 README.md CHANGELOG.md LICENSE THIRD_PARTY.md docs/platform-support.md \
+install -m 644 README.md README.en.md MANUAL.md CHANGELOG.md SECURITY.md \
+    LICENSE AUTHORS.md THIRD_PARTY.md docs/platform-support.md \
     "$PKG/usr/share/doc/skynet-dataplane/"
+install -d "$PKG/usr/share/doc/skynet-dataplane/docs/adr" \
+           "$PKG/usr/share/doc/skynet-dataplane/docs/screenshots"
+install -m 644 docs/*.md "$PKG/usr/share/doc/skynet-dataplane/docs/"
+install -m 644 docs/adr/*.md "$PKG/usr/share/doc/skynet-dataplane/docs/adr/"
+install -m 644 docs/screenshots/*.png "$PKG/usr/share/doc/skynet-dataplane/docs/screenshots/"
 # Debian 规矩：/usr/share/doc/<pkg>/copyright 是机器的许可证声明（DEP-5 格式）。
 # 它比 LICENSE 多写了 vendored egui-winit 的 MIT OR Apache-2.0 归属。
 install -m 644 packaging/copyright "$PKG/usr/share/doc/skynet-dataplane/copyright"
@@ -87,9 +93,9 @@ Section: net
 Priority: optional
 Architecture: ${ARCH}
 Installed-Size: ${SIZE}
-Maintainer: Skynet <hermes@skynet.club>
+Maintainer: Skynet-Club <hermes@skynet.club>
 Depends: libc6, libgcc-s1, libssl3, zlib1g, libzstd1, libx11-6, libxkbcommon0, libwayland-client0, libgl1, libegl1
-Description: 天网盒子：单机多 agent 的下载/上传/校验数据面
+Description: 天网盒子 / Skynet Data Box：单机多 agent 的下载、上传与校验
  常驻 daemon、共享台账与内容寻址缓存、per-agent token/配额/凭证、
  HLS/DASH/BT、MCP 与状态栏。安装后启用用户服务：
  systemctl --user enable --now skynet-dataplaned

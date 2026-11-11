@@ -2453,7 +2453,7 @@ fn api_json_status(
     }
     let r = match rb.send() {
         Ok(r) => r,
-        // 随 agent 启动：agent 一调命令就把数据面带起来，不需要开机自启。
+        // 随 agent 启动：agent 一调命令就把数据盒子带起来，不需要开机自启。
         // 只对默认回环地址做这件事（SKYGET_API 指向别处时，那边由别人负责）。
         Err(e) if autostart_allowed(&base) => {
             match skyfetch::daemon::ensure(&base) {
@@ -2545,7 +2545,7 @@ fn api_json_as(
     };
     let r = match send(&client) {
         Ok(r) => r,
-        // 随 agent 启动：agent 一调命令就把数据面带起来，不需要开机自启。
+        // 随 agent 启动：agent 一调命令就把数据盒子带起来，不需要开机自启。
         Err(e) if autostart_allowed(&base) => {
             match skyfetch::daemon::ensure(&base) {
                 skyfetch::daemon::Ensured::Failed(_) => {

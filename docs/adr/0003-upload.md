@@ -1,4 +1,4 @@
-# ADR 0003 · 上传：和下载共用一套数据面，但先解决三个安全问题
+# ADR 0003 · 上传：和下载共用同一个数据盒子，但先解决三个安全问题
 
 - 状态：已实现 MVP（0.20：PUT + tus；S3 multipart / 远端 digest 待做）
 - 相关：`src/upload.rs`、`src/model.rs`、`src/api.rs`、`src/scheduler.rs`、`src/security.rs`

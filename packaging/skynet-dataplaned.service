@@ -1,5 +1,5 @@
 [Unit]
-Description=天网盒子守护进程（单机多 agent 数据面）
+Description=天网盒子守护进程（单机多 agent 数据盒子）
 Documentation=file:///home/skynet/skynet-download/README.md
 # 端口固定 7788；换端口：ExecStart 加 --port NNNN，界面用 SKYGET_API 指过去
 After=network-online.target

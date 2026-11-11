@@ -5,7 +5,7 @@
 //! / `skyget_cancel` 四个工具。
 //!
 //! 它**自己不下载**，只把调用转给本机守护进程 —— 否则每个 agent 会话
-//! 都会变成一个新的数据面，缓存、并发和台账又分裂了。
+//! 都会变成一个新的数据盒子，缓存、并发和台账又分裂了。
 //!
 //! 协议：MCP 的 stdio 传输是「一行一个 JSON-RPC 2.0 对象」。
 //! stdout 只放协议消息，日志一律走 stderr。
@@ -25,7 +25,7 @@ trait Daemon {
     fn retry(&self, id: &str) -> Result<Value, String>;
     fn pin(&self, sha256: &str, agent: &str, ttl_secs: u64, note: &str) -> Result<Value, String>;
     fn unpin(&self, sha256: &str, agent: Option<&str>) -> Result<Value, String>;
-    /// 这台数据面上有哪些 agent、各自的策略和并发（`GET /agents`）。
+    /// 这台数据盒子上有哪些 agent、各自的策略和并发（`GET /agents`）。
     fn agents(&self) -> Result<Value, String>;
     /// 当前最值得显示的活跃任务（`GET /statusline`）。
     fn active(&self, source: Option<&str>) -> Result<Value, String>;
@@ -404,7 +404,7 @@ fn tool_specs() -> Value {
         },
         {
             "name": "skyget_agents",
-            "description": "看这台数据面上有哪些 agent、各自的任务数/并发上限/落地根/允许主机/上传根。token 不会出现在返回里；用 agent token 调用时只看得到自己。",
+            "description": "看这台数据盒子上有哪些 agent、各自的任务数/并发上限/落地根/允许主机/上传根。token 不会出现在返回里；用 agent token 调用时只看得到自己。",
             "inputSchema": {"type": "object", "properties": {}}
         },
         {

@@ -218,7 +218,7 @@ pub fn run() -> anyhow::Result<()> {
 
 /// 缓存水位线守护线程。
 ///
-/// 单机数据面的头号故障模式不是下载慢，是“磁盘被缓存吃满”。
+/// 单机数据盒子的头号故障模式不是下载慢，是“磁盘被缓存吃满”。
 /// `skyget prune` 已经能把该清的清掉，但它要人记得手动跑 —— 而 agent 不会记得。
 ///
 /// 配置（全在 daemon 侧，不由 agent 决定）：
@@ -299,11 +299,11 @@ pub enum Ensured {
 /// 再不行才直接 spawn 同目录的二进制。
 ///
 /// 这是"随 agent 启动"的核心原语：agent 一跑 `skyget …` 或 MCP 工具，
-/// 这里就把数据面带起来，不需要开机自启。
+/// 这里就把数据盒子带起来，不需要开机自启。
 ///
 /// 优先 systemd 的原因很实在：**策略与凭证来自 unit 的 EnvironmentFile**，
 /// 而不是当前这个 agent 的环境 —— 否则 agent 自己设个 `SKYGET_ALLOW_PRIVATE=1`
-/// 就能把自己拉起的数据面放宽。systemd 不可用时才退化成直启，并在返回值里说清楚。
+/// 就能把自己拉起的数据盒子放宽。systemd 不可用时才退化成直启，并在返回值里说清楚。
 pub fn ensure(base: &str) -> Ensured {
     if health_ok(base) {
         return Ensured::Already;

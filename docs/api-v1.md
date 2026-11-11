@@ -470,7 +470,7 @@ GET /health
 `capabilities` 是这个**构建**真的编进去的面（`http` 恒在；`hls`/`manifest` 随 http；
 `bt`、`gui` 按 feature 出现）。agent 可以先探测再决定走哪条路，不必读 skill。
 
-## 7.6 谁在用这台数据面
+## 7.6 谁在用这台数据盒子
 
 ```http
 GET /agents

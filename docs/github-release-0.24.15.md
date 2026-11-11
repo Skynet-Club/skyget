@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/Skynet-Club/skyget/main/assets/icon.png" width="104" alt="天网盒子 · Skynet Dataplane">
+<img src="https://raw.githubusercontent.com/Skynet-Club/skyget/main/assets/icon.png" width="104" alt="天网盒子 · Skynet Data Box">
 
-# 天网盒子 · Skynet Dataplane
+# 天网盒子 · Skynet Data Box
 
-### 一台机器上，所有 AI agent 共用的本机数据面
+### 一台机器上，所有 AI agent 共用的本机数据盒子
 
 **可信下载与上传 · 断点续传 · 内容寻址缓存 · 公平调度 · per-agent 限权**
 
@@ -14,6 +14,12 @@
 </div>
 
 ---
+
+> 对外产品名是 **天网盒子 / Skynet Data Box**。为兼容已有安装，发行包、环境变量和
+> 二进制仍保留 `skynet-dataplane` / `skynet-dataplaned` 名称。
+>
+> 项目署名与品牌归属按 **Skynet-Club** 统筹，最终署名以双方共同确认为准。
+> 详见 [AUTHORS.md](https://github.com/Skynet-Club/skyget/blob/main/AUTHORS.md)。
 
 ## 版本状态与平台支持
 
@@ -320,7 +326,7 @@ skyget doctor
 
 ## For English readers
 
-**Skynet Dataplane is the local dataplane every agent on a machine can share.**
+**Skynet Data Box is the local data box every agent on a machine can share.**
 
 It provides SHA-256-gated downloads and uploads, resumable transfers, a
 content-addressed cache, fair scheduling, an auditable ledger, and per-agent policy.
@@ -341,5 +347,5 @@ S3 multipart upload, and concurrency/security testing.
 ---
 
 **产物：** `skynet-dataplane_0.24.15_amd64.deb`  
-**SHA-256：** `77818b42dea20692938dcccfc8897c0c17ae3a62fe1a81c62fd63c2c52a298ec`<br>
+**SHA-256：** `7b97e06bb5bac98e0a268b143bb9a442cef3986e8b88e9fa81ec4e185047dd5e`<br>
 **许可证：** MIT

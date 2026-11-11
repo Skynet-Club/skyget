@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="assets/icon.png" width="96" alt="天网盒子 · Skynet Dataplane">
+<img src="assets/icon.png" width="96" alt="天网盒子 · Skynet Data Box">
 
-# 天网盒子 · Skynet Dataplane
+# 天网盒子 · Skynet Data Box
 
-**一台机器上所有 agent 共用的本机数据面。**
+**一台机器上所有 agent 共用的本机数据盒子。**
 
 可信下载与上传 · 断点续传 · 内容寻址缓存 · 公平调度 · per-agent 限权
 
@@ -43,10 +43,15 @@ skyget watch <job-id>
 `skyget` 同时提供 CLI、MCP、HTTP API 和 GUI。它们共享同一本台账、同一份缓存、
 同一个调度器和同一套权限边界。
 
+> 产品名是 **天网盒子 / Skynet Data Box**。为兼容已有安装，发行包、环境变量和
+> 二进制仍保留 `skynet-dataplane` / `skynet-dataplaned` 名称，它们不是当前的对外品牌。
+> 项目署名与品牌归属按 **Skynet-Club** 统筹，最终署名以双方共同确认为准。
+> 详情见 [AUTHORS.md](AUTHORS.md)。
+
 <details>
 <summary><strong>English summary</strong></summary>
 
-Skynet Dataplane is a local daemon for machines where multiple AI agents download,
+Skynet Data Box is a local daemon for machines where multiple AI agents download,
 upload, and reuse large data. It provides SHA-256-gated transfers, resumable partials,
 a content-addressed cache, fair scheduling, an auditable ledger, and per-agent policy.
 
@@ -104,7 +109,7 @@ feature 的意义在下游：天网机库只想装个二进制，不该被拖进
 | feature | 带进什么 | 谁用 |
 |---|---|---|
 | `http`（默认） | 直链、切片流、清单、自检、本地接口 | 机库、agent |
-| `bt` | + librqbit / tokio（magnet、.torrent） | 数据面 / 桌面端 |
+| `bt` | + librqbit / tokio（magnet、.torrent） | 数据盒子 / 桌面端 |
 | `gui` | + eframe / egui（界面） | 桌面端 |
 
 Debian 包：`packaging/build-deb.sh` 产出 `dist/skynet-dataplane_<version>_<arch>.deb`
@@ -228,7 +233,7 @@ curl -o out.bin "$(skyget resolve <URL>)"  # 零网络
 | 网盘分享页 / 迅雷 / DRM | 明确拒绝 | ❌ | ❌ | ❌ |
 
 如果你的场景是“一个人、一条命令、下一个文件”，curl 更合适；要云盘同步，rclone
-更合适；要 agent 共用、可审计、可限额的数据面，才是这个项目的位置。
+更合适；要 agent 共用、可审计、可限额的本机数据盒子，才是这个项目的位置。
 
 ## 给人用
 
@@ -388,9 +393,9 @@ agent、机库（`--as hangar`）起的任务也写同一本台账 —— 这样
 - **per-agent token 隔离**：任务、事件、控制、pin 都只能碰自己的；控制事件记录 `by`。
 - **终态 webhook**、**`prune --max-bytes`**、**CI 覆盖全部 e2e**。
 
-## 0.21：天网数据面
+## 0.21：agent 共用数据盒子
 
-名字从「天网下载器」升级为「天网数据面 / Skynet Dataplane」：下载只是入口，
+这一版从「天网下载器」升级为多 agent 共用的本机数据盒子：下载只是入口，
 产品做的是单机多 agent 的数据搬运、校验、缓存、调度和限权。
 
 - 新二进制 `skynet-dataplane` / `skynet-dataplaned`；旧名 `skynet-download` /
@@ -400,7 +405,7 @@ agent、机库（`--as hangar`）起的任务也写同一本台账 —— 这样
 
 ## 0.20：上传（PUT / tus，契约见 [docs/api-v1.md](docs/api-v1.md)）
 
-下载和上传是同一个数据面的两个方向：同一本台账、同一套事件、同一个调度器、同一套策略。
+下载和上传是同一个数据盒子的两个方向：同一本台账、同一套事件、同一个调度器、同一套策略。
 
 - `skyget upload <本地文件> <目标地址> --protocol put|tus --sha256 <hex> --as claude`
   提交给 daemon；之后 `skyget watch <id>` 跟进度。
@@ -551,7 +556,7 @@ Claude Code 配置：
 ## 结构：守护进程干活，窗口只是它的脸
 
 ```text
-skynet-dataplaned   常驻数据面：队列、重试、台账、内容缓存、上传、策略
+skynet-dataplaned   常驻数据盒子：队列、重试、台账、内容缓存、上传、策略
       ↑ 本地接口 127.0.0.1:7788          （旧名 skynet-downloadd）
 skynet-dataplane    窗口：提交、看进度、机群视图、暂停/继续/取消/删除 —— 自己不下载
                                        （旧名 skynet-download）

@@ -79,7 +79,7 @@ cat ~/.local/state/skyget/opencode-plugin.alive
 ```
 
 mtime 不更新 = 没加载或没轮询；内容里 `http 401` = token 没读到；
-`err …` = 数据面连不上。这一行能区分三种完全不同的故障。
+`err …` = 数据盒子连不上。这一行能区分三种完全不同的故障。
 
 token 优先取 `SKYGET_API_TOKEN`，没有就直接读
 `~/.config/skynet-dataplane/tokens` 里的 `main=` —— TUI 从哪个 shell 启动不由插件决定，

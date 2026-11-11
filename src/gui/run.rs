@@ -26,7 +26,7 @@ pub fn run() -> eframe::Result {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([w0, h0])
             .with_min_inner_size([980.0, 520.0])
-            .with_title("天网盒子 · Skynet.Club")
+            .with_title("天网盒子 · Skynet-Club")
             // 自己画标题栏，才能跟天网哨兵、天网机库是同一张脸
             .with_decorations(false)
             // 稳定的 app_id 保留 `skynet-download`：Wayland/X11 靠它归并窗口，
@@ -36,7 +36,7 @@ pub fn run() -> eframe::Result {
         ..Default::default()
     };
     let result = eframe::run_native(
-        "天网盒子 · Skynet.Club",
+        "天网盒子 · Skynet-Club",
         options,
         Box::new(move |cc| {
             let mut app = App::new(cc);

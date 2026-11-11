@@ -799,7 +799,7 @@ impl App {
                             // 一旦可选中，egui 的文本选择逻辑就会在悬停时把光标设成 I-beam，
                             // 手形光标会被它盖掉。一个外链本来也不需要能选文字。
                             egui::Label::new(
-                                RichText::new("· Skynet.Club")
+                                RichText::new("· Skynet-Club")
                                     .size(theme::T_MICRO)
                                     .color(if hot { theme::TEXT } else { theme::FAINT }),
                             )
@@ -808,7 +808,7 @@ impl App {
                         )
                         // 官方 API，比自己 set_cursor_icon 更靠得住：交给 egui 的交互系统统一裁决
                         .on_hover_cursor(egui::CursorIcon::PointingHand)
-                        .on_hover_text("打开 skynet.club");
+                        .on_hover_text("打开 Skynet-Club GitHub");
                     // 光标要**每帧**设。egui 每帧都会把光标重置成默认值，
                     // 只在“刚悬停”那一帧设一次，下一秒就退回文本光标了。
                     if resp.hovered() {
@@ -819,7 +819,7 @@ impl App {
                         ui.ctx().request_repaint();
                     }
                     if resp.clicked() {
-                        open_url("https://skynet.club");
+                        open_url("https://github.com/Skynet-Club");
                     }
 
                     ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
@@ -1002,9 +1002,9 @@ impl App {
                             )
                             .on_hover_text(match agents {
                                 Some(n) => format!(
-                                    "看这台数据面上有哪些 agent、各自能下到哪、正在跑几个（{n} 个）"
+                                    "看这台数据盒子上有哪些 agent、各自能下到哪、正在跑几个（{n} 个）"
                                 ),
-                                None => "看这台数据面上有哪些 agent、各自能下到哪、正在跑几个"
+                                None => "看这台数据盒子上有哪些 agent、各自能下到哪、正在跑几个"
                                     .to_string(),
                             });
                         if resp.hovered() {

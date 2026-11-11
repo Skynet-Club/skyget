@@ -39,14 +39,18 @@ for name in skyget skynet-dataplaned skynet-downloadd skynet-dataplane skynet-do
 done
 
 # 文档（deb 里在 /usr/share/doc；用户装就放 ~/.local/share/doc）
-for f in README.md CHANGELOG.md LICENSE THIRD_PARTY.md; do
+for f in README.md README.en.md MANUAL.md CHANGELOG.md SECURITY.md \
+         LICENSE AUTHORS.md THIRD_PARTY.md; do
     [ -f "$ROOT/$f" ] && install -m 644 "$ROOT/$f" "$DOC/$f"
 done
 [ -f "$ROOT/LICENSE" ] && install -m 644 "$ROOT/LICENSE" "$DOC/copyright"
-[ -f "$ROOT/docs/platform-support.md" ] && \
-    install -m 644 "$ROOT/docs/platform-support.md" "$DOC/platform-support.md"
-[ -f "$ROOT/docs/release-notes-0.24.md" ] && \
-    install -m 644 "$ROOT/docs/release-notes-0.24.md" "$DOC/release-notes-0.24.md"
+install -d "$DOC/docs/adr" "$DOC/docs/screenshots"
+for f in "$ROOT"/docs/*.md; do
+    [ -f "$f" ] && install -m 644 "$f" "$DOC/docs/"
+done
+for f in "$ROOT"/docs/adr/*.md "$ROOT"/docs/screenshots/*.png; do
+    [ -f "$f" ] && install -m 644 "$f" "$DOC/docs/$(basename "$(dirname "$f")")/"
+done
 
 echo "已装到 $BIN（实体文件，不依赖仓库目录）："
 for name in skyget skynet-dataplaned skynet-downloadd skynet-dataplane skynet-download skynet-mcp; do

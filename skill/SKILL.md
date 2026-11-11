@@ -1,11 +1,12 @@
 ---
 name: skyget-transfer
-description: Use for large or reliability-sensitive transfers — models, datasets, images, ISOs, build artifacts, or any download/upload that is over ~100MB, of unknown size, needs resume, needs sha256 verification, should run in the background after your shell exits, is shared between several agents on one machine, or may already be cached locally (resolve/curl turn a repeat fetch into zero network). Routes the payload through the local 天网盒子 / skynet-dataplane daemon instead of curl or wget; curl stays fine for metadata and small files. Also use when skyget itself is missing or outdated and has to be installed.
+description: Use for large or reliability-sensitive transfers — models, datasets, images, ISOs, build artifacts, or any download/upload that is over ~100MB, of unknown size, needs resume, needs sha256 verification, should run in the background after your shell exits, is shared between several agents on one machine, or may already be cached locally (resolve/curl turn a repeat fetch into zero network). Routes the payload through the local 天网盒子 / Skynet Data Box daemon (`skynet-dataplaned`; compatibility names remain) instead of curl or wget; curl stays fine for metadata and small files. Also use when skyget itself is missing or outdated and has to be installed.
 license: MIT
 ---
 # skyget-transfer
 
-Move data through the local **天网盒子 / skynet-dataplane** daemon instead of curl/wget.
+Move data through the local **天网盒子 / Skynet Data Box** daemon
+(`skynet-dataplaned`; compatibility names remain) instead of curl/wget.
 It gives you three things curl does not: **sha256 as a hard gate** (a mismatch fails the
 transfer and the file is discarded), a **content-addressed cache** (same content stored
 once per machine, so a repeat fetch is zero network), and **resume** that survives

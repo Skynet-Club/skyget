@@ -1,8 +1,13 @@
-# Skynet Dataplane
+# Skynet Data Box
 
-An agent-native data plane for a single machine: downloads, uploads, verification,
+An agent-native local data box for a single machine: downloads, uploads, verification,
 a content-addressed cache, scheduling, and per-agent policy. One daemon, one ledger,
 many agents.
+
+> The public product name is **Skynet Data Box / 天网盒子**. Existing package, environment
+> variable, and binary names still use `skynet-dataplane` / `skynet-dataplaned` for
+> compatibility. Project attribution and brand ownership are coordinated with
+> **Skynet-Club**, subject to final mutual confirmation.
 
 ## Platform support
 
