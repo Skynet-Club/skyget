@@ -8,6 +8,8 @@
 - [ ] `Cargo.toml` 版本、`CHANGELOG.md` 顶部条目、文档里的版本一致。
 - [ ] 行为变化写进 `CHANGELOG.md`；契约变化同步 `docs/api-v1.md` 和
       `docs/conformance.md`（新增承诺必须加一行测试证据）。
+- [ ] 平台矩阵、官方发行物、系统依赖和未来平台路线图与
+      `docs/platform-support.md` 一致；官方支持范围不能靠“源码可编”暗示。
 - [ ] 安全边界变化同步 `docs/security.md`（包括残余风险，不许只写“已修复”）。
 - [ ] `LICENSE` / `THIRD_PARTY.md` 在；deb 里有 `usr/share/doc/skynet-dataplane/copyright`。
 - [ ] `docs/release-notes-<版本>.md` 写了「已知边界」和产物 sha256（`sha256sum dist/*.deb`）。

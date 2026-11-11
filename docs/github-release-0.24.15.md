@@ -278,6 +278,9 @@ skyget doctor
 - per-agent 带宽和缓存容量配额；
 - 连接上限压力测试与 DNS rebinding 加固。
 
+平台移植的当前状态和完成标准持续更新在
+[路线图 issue #4](https://github.com/Skynet-Club/skyget/issues/4)。
+
 ## 寻找早期用户与协作者
 
 现在最有价值的是具体场景，而不是泛泛的功能清单：
@@ -311,6 +314,7 @@ skyget doctor
 - [描述你的真实 agent 工作流](https://github.com/Skynet-Club/skyget/issues/1)
 - [RFC：Metalink 1.0](https://github.com/Skynet-Club/skyget/issues/2)
 - [Good first issue：连接上限压力测试](https://github.com/Skynet-Club/skyget/issues/3)
+- [路线图：原生 macOS 与 Windows 10/11](https://github.com/Skynet-Club/skyget/issues/4)
 
 ---
 
@@ -337,5 +341,5 @@ S3 multipart upload, and concurrency/security testing.
 ---
 
 **产物：** `skynet-dataplane_0.24.15_amd64.deb`  
-**SHA-256：** `f02ff96cfe4e51511e54652db5a2b296049784ef83725f6e722cdb9f59f62c58`  
+**SHA-256：** `77818b42dea20692938dcccfc8897c0c17ae3a62fe1a81c62fd63c2c52a298ec`<br>
 **许可证：** MIT

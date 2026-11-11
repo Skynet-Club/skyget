@@ -52,7 +52,7 @@ if [ -f assets/icon.png ]; then
 fi
 # 发行说明不放进包里：它带产物自己的 sha256，而包不可能包含自己的哈希。
 # 它在 dist/ 里和 .deb 并排发。
-install -m 644 README.md CHANGELOG.md LICENSE THIRD_PARTY.md \
+install -m 644 README.md CHANGELOG.md LICENSE THIRD_PARTY.md docs/platform-support.md \
     "$PKG/usr/share/doc/skynet-dataplane/"
 # Debian 规矩：/usr/share/doc/<pkg>/copyright 是机器的许可证声明（DEP-5 格式）。
 # 它比 LICENSE 多写了 vendored egui-winit 的 MIT OR Apache-2.0 归属。

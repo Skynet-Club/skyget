@@ -102,12 +102,12 @@ HTTP 契约仍是 **v1**，只做了加法（`priority`、`phase`、`/check`、`
 
 | 文件 | 大小 | sha256 |
 |---|---|---|
-| `skynet-dataplane_0.24.15_amd64.deb` | 19,509,624 | `f02ff96cfe4e51511e54652db5a2b296049784ef83725f6e722cdb9f59f62c58` |
+| `skynet-dataplane_0.24.15_amd64.deb` | 19,511,352 | `77818b42dea20692938dcccfc8897c0c17ae3a62fe1a81c62fd63c2c52a298ec` |
 
 包里：`skyget` / `skynet-dataplane`（GUI）/ `skynet-dataplaned`（daemon）/ `skynet-mcp`、
 systemd 用户单元、桌面入口与图标、bash/zsh/fish 补全、`man skyget` / `man skynet-dataplaned`、
 `/usr/share/doc/skynet-dataplane/` 下的 README / CHANGELOG / LICENSE / THIRD_PARTY /
-DEP-5 copyright。
+平台支持与路线图 / DEP-5 copyright。
 
 ## 许可证
 

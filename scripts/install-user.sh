@@ -43,6 +43,8 @@ for f in README.md CHANGELOG.md LICENSE THIRD_PARTY.md; do
     [ -f "$ROOT/$f" ] && install -m 644 "$ROOT/$f" "$DOC/$f"
 done
 [ -f "$ROOT/LICENSE" ] && install -m 644 "$ROOT/LICENSE" "$DOC/copyright"
+[ -f "$ROOT/docs/platform-support.md" ] && \
+    install -m 644 "$ROOT/docs/platform-support.md" "$DOC/platform-support.md"
 [ -f "$ROOT/docs/release-notes-0.24.md" ] && \
     install -m 644 "$ROOT/docs/release-notes-0.24.md" "$DOC/release-notes-0.24.md"
 
